@@ -6,16 +6,16 @@
   <title>點解果汁盒會凹入去？｜盒外空氣壓力</title>
   <meta name="description" content="逐步動畫：密封果汁盒吸走空氣後會凹；有縫隙／入氣口就唔會。對比盒內空氣壓力同盒外空氣壓力。">
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
-<body>
+<body class="compare">
   <div class="page">
     <header class="hero">
       <p class="eyebrow">小學科學 · 逐步示範</p>
       <h1>點解果汁盒會凹入去？</h1>
       <p class="goal">
         <span class="goal-label">學習目標</span>
-        用吸管吸走密封果汁盒入面嘅果汁同空氣，外面空氣入唔到。盒入面氣體分子變少，盒內空氣壓力下降；盒外空氣壓力冇變，就由外向內把紙盒壓凹。如果有縫隙／入氣口，空氣會入返補充，紙盒就唔會凹。
+        一開始就對比兩個盒：左密封、右唔密封（縫隙／入氣口）。用吸管吸走密封盒入面嘅果汁同空氣，外面空氣入唔到，盒內分子變少、氣壓下降，盒外空氣壓力就把紙盒壓凹；有縫隙／入氣口時空氣入返補充，紙盒就唔會凹。
       </p>
     </header>
 
@@ -28,7 +28,7 @@
           <strong>盒外空氣壓力</strong>
           <span>盒外向內推嘅力</span>
         </p>
-        <div class="compare-labels" id="compare-labels" hidden>
+        <div class="compare-labels" id="compare-labels">
           <p class="compare-label sealed">密封</p>
           <p class="compare-label open">唔密封（縫隙／入氣口）</p>
         </div>
@@ -38,7 +38,7 @@
               <!-- scene filled by app.js -->
             </div>
           </div>
-          <div class="scene-panel" id="panel-open" data-role="open" hidden>
+          <div class="scene-panel" id="panel-open" data-role="open">
             <div class="svg-wrap" id="wrap-open">
               <!-- scene filled by app.js -->
             </div>
@@ -48,14 +48,14 @@
 
       <aside class="side" aria-label="氣壓同分子">
         <div class="panel" id="mol-panel">
-          <p class="panel-title" id="mol-panel-title">盒內分子</p>
+          <p class="panel-title" id="mol-panel-title">盒內分子（對比）</p>
           <div class="mol-dual" id="mol-dual">
             <div class="mol-col" id="mol-col-sealed">
-              <p class="mol-col-label" id="mol-label-sealed" hidden>密封</p>
+              <p class="mol-col-label" id="mol-label-sealed">密封</p>
               <p class="count" id="mol-count-sealed">48</p>
               <div class="dotbank" id="dotbank-sealed"></div>
             </div>
-            <div class="mol-col" id="mol-col-open" hidden>
+            <div class="mol-col" id="mol-col-open">
               <p class="mol-col-label">唔密封</p>
               <p class="count" id="mol-count-open">48</p>
               <div class="dotbank" id="dotbank-open"></div>
@@ -66,13 +66,13 @@
           <p class="panel-title">氣壓比較</p>
           <div class="meter-row" id="meter-row">
             <div class="vmeter" id="meter-in-sealed">
-              <p class="meter-name" id="name-in-sealed">盒內空氣壓力</p>
+              <p class="meter-name" id="name-in-sealed">密封 · 盒內空氣壓力</p>
               <div class="meter-track" aria-hidden="true">
                 <div class="meter-fill in" id="fill-in-sealed"></div>
               </div>
               <p class="meter-value in" id="val-in-sealed">高</p>
             </div>
-            <div class="vmeter" id="meter-in-open" hidden>
+            <div class="vmeter" id="meter-in-open">
               <p class="meter-name" id="name-in-open">唔密封 · 盒內</p>
               <div class="meter-track" aria-hidden="true">
                 <div class="meter-fill in" id="fill-in-open"></div>
@@ -94,7 +94,7 @@
 
     <section class="caption-card" aria-live="polite">
       <p class="sr-only" id="sr-step"></p>
-      <h2 id="caption-title">密封果汁盒</h2>
+      <h2 id="caption-title">兩個果汁盒</h2>
       <div class="legend" id="legend"></div>
       <p id="caption-body"></p>
       <div class="recap" id="recap" hidden>
@@ -223,6 +223,6 @@
   <noscript>
     <p class="noscript">請開啟 JavaScript，先可以逐步睇示範。</p>
   </noscript>
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* Juice-carton pressure lesson.
    Sealed: fewer molecules → lower inside air pressure → outside air pressure pushes walls in.
    Unsealed: air returns through a gap → inside air pressure stays up → no crush.
-   From the first sip onward, left = sealed, right = unsealed (permanent split). */
+   From step 1 onward, left = sealed, right = unsealed (permanent split; gap visible before sip). */
 (function () {
   "use strict";
 
@@ -12,7 +12,7 @@
   const COL_OUT = "#1565c0";
   const LAST = 6;
   const RECAP = 6;
-  const COMPARE_FROM = 2;
+  const COMPARE_FROM = 0;
   const STEP_COUNT = LAST + 1;
   const OUT_LEN = 42;
   const COLS = 8;
@@ -81,19 +81,21 @@
 
   const STEPS = [
     {
-      title: "密封果汁盒",
-      caption: "呢個果汁盒封住咗。小圓點係盒入面嘅空氣分子，盒外都有空氣。",
-      legend: "小圓點代表空氣分子。",
-      meter: "吸之前，兩邊空氣壓力都高。",
+      title: "兩個果汁盒",
+      caption:
+        "左邊密封：封住咗，冇縫隙。右邊唔密封：已經有縫隙／入氣口。兩邊都未吸，小圓點係盒入面嘅空氣分子，氣壓都高。",
+      legend: "左＝密封。右＝唔密封（縫隙／入氣口）。小圓點＝空氣分子。",
+      meter: "吸之前，密封同唔密封：兩邊空氣壓力都高／相同。",
       next: "下一步",
       sealed: sealedState({ mask: MASK_ALL, juice: 0, inside: 1 }),
-      open: null,
+      open: openState({ juice: 0, arrows: 0, arrowIn: 0, arrowOut: 0 }),
     },
     {
-      title: "兩邊差不多大",
-      caption: "箭嘴表示邊度推牆。綠色向外、藍色向內，兩邊差不多大，所以氣壓相同。",
-      legend: "綠色箭嘴：盒內向外推。藍色箭嘴：盒外向內推。",
-      meter: "兩邊空氣壓力相同。",
+      title: "兩邊氣壓都相同",
+      caption:
+        "左邊密封、右邊唔密封，兩邊都仲未吸。綠色向外、藍色向內，兩邊推牆嘅力差不多大，所以氣壓相同。",
+      legend: "左＝密封。右＝唔密封。綠色向外推；藍色向內推。",
+      meter: "密封同唔密封：兩邊空氣壓力都相同。",
       next: "吸一下",
       sealed: sealedState({
         mask: MASK_ALL,
@@ -103,7 +105,7 @@
         arrows: 1,
         inside: 1,
       }),
-      open: null,
+      open: openState({ juice: 0, arrows: 1 }),
     },
     {
       title: "吸走分子",
@@ -982,25 +984,18 @@
 
   function renderLegend() {
     const el = $("legend");
+    let extra = "";
     if (current === 0) {
-      el.innerHTML = "小圓點代表空氣分子。";
-      return;
+      extra = `<span class="same-note">小圓點＝空氣分子</span>`;
+    } else if (current === 1) {
+      extra = `<span class="same-note">而家兩邊氣壓相同</span>`;
+    } else if (current >= 4) {
+      extra = `<span class="same-note">藍色＝盒外空氣壓力</span>`;
     }
-    if (isCompare()) {
-      el.innerHTML =
-        `<span class="key-item"><i class="swatch in"></i>左：密封</span>` +
-        `<span class="key-item"><i class="swatch out"></i>右：唔密封（縫隙／入氣口）</span>` +
-        (current >= 4
-          ? `<span class="same-note">藍色＝盒外空氣壓力</span>`
-          : "");
-      return;
-    }
-    const blue = "藍色向內推（盒外空氣壓力）";
-    const same = current === 1 ? '<span class="same-note">而家氣壓相同</span>' : "";
     el.innerHTML =
-      `<span class="key-item"><i class="swatch in"></i>綠色向外推（盒內）</span>` +
-      `<span class="key-item"><i class="swatch out"></i>${blue}</span>` +
-      same;
+      `<span class="key-item"><i class="swatch in"></i>左：密封</span>` +
+      `<span class="key-item"><i class="swatch out"></i>右：唔密封（縫隙／入氣口）</span>` +
+      extra;
   }
 
   function updateChrome() {
@@ -1062,7 +1057,11 @@
     } else {
       const jobs = [sceneSealed.animateTo(target.sealed, token)];
       if (target.open && sceneOpen) jobs.push(sceneOpen.animateTo(target.open, token));
-      else if (sceneOpen) sceneOpen.applyInstant(openState({ juice: target.sealed.juice, arrows: 0, gap: 0 }));
+      else if (sceneOpen) {
+        sceneOpen.applyInstant(
+          openState({ juice: target.sealed.juice, arrows: target.sealed.arrows, gap: 1 })
+        );
+      }
       await Promise.all(jobs);
     }
     if (token !== runId) return;
